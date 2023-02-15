@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS department;
 -- "department" table with two columns: id and name--
 CREATE TABLE department (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30) NOT NULL
+    department_name VARCHAR(30) NOT NULL
 );
 
 -- "role" table with four columns: id, title, salary and department_id --
