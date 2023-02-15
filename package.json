@@ -18,10 +18,12 @@
   "author": "Mauxi Moncada",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MoMoncada/employee-tracker/issues"
+    "url": "https://github.com/MoMoncada/employee-tracker"
   },
   "homepage": "https://github.com/MoMoncada/employee-tracker#readme",
   "dependencies": {
-    "inquirer": "^8.2.4"
+    "console-table": "^0.1.2",
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.1.2"
   }
 }
