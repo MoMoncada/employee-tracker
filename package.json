@@ -1,0 +1,27 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "Command line application that manages a company's employee database using Node.js, Inquirer and MySQL.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoMoncada/employee-tracker.git"
+  },
+  "keywords": [
+    "employee",
+    "tracker"
+  ],
+  "author": "Mauxi Moncada",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MoMoncada/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/MoMoncada/employee-tracker#readme",
+  "dependencies": {
+    "inquirer": "^8.2.4"
+  }
+}
