@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/MoMoncada/employee-tracker"
   },
-  "homepage": "https://github.com/MoMoncada/employee-tracker#readme",
+  "homepage": "https://github.com/MoMoncada/employee-tracker",
   "dependencies": {
     "console-table": "^0.1.2",
     "console.table": "^0.10.0",

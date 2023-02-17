@@ -13,6 +13,8 @@ const connection = mysql.createConnection({
 });
 
 
+
+//---- Initial prompts for the user ----//
 const promptMenu = () => {
     return inquirer.prompt([
         {
@@ -30,8 +32,77 @@ const promptMenu = () => {
                 'Exit'
             ]
         }
-    ])
+    ]) 
+    //-- Functions to be executed according to the user's choice --//
+    .then(selectedChoice => {
+        switch (selectedChoice.menu) {
+            case 'View all departments':
+                selectionDepartments();
+                break;
+            
+            case 'View all roles':
+                selectionRole();
+                break;
+            
+            case 'View all employees':
+                selectionEmployee();
+                break;
+
+            case 'Add a department':
+                selectionAddDepartment();
+                break;
+
+            case 'Add a role':
+                selectionAddRole();
+                break;
+            
+            case 'Update an employee role':
+                selectionUpdateEmployeeRole();
+                break;
+
+            default:
+                process.exit();
+        }
+    });
+
 };
+
+//---- Queries to select data from the database tables ----//
+
+const selectionDepartments = () => {
+    connection.query(
+        'SELECT * FROM department;',
+        (err, results) => {
+            console.table(results);
+            promptMenu();
+        }
+    );
+
+};
+
+
+const selectionRole = () => {
+    connection.query(
+        'SELECT * FROM role;',
+        (err, results) => {
+            console.table(results);
+            promptMenu();
+        }
+    )
+}
+
+
+const selectionEmployee = () => {
+    connection.query(
+        'SELECT * FROM employee;',
+        (err, results) => {
+            console.table(results);
+            promptMenu();
+        }
+    )
+}
+
+
 
 
 
