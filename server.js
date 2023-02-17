@@ -2,7 +2,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const mysql = require('mysql2');
-// const consoleTable = require('console.table');
+const consoleTable = require('console.table');
 
 //---- Connecting to the database ----//
 const connection = mysql.createConnection({

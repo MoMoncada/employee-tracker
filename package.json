@@ -23,6 +23,7 @@
   "homepage": "https://github.com/MoMoncada/employee-tracker#readme",
   "dependencies": {
     "console-table": "^0.1.2",
+    "console.table": "^0.10.0",
     "inquirer": "^8.2.4",
     "mysql2": "^3.1.2"
   }
