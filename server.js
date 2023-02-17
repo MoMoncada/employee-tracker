@@ -37,7 +37,7 @@ const promptMenu = () => {
     .then(selectedChoice => {
         switch (selectedChoice.menu) {
             case 'View all departments':
-                selectionDepartments();
+                selectionDepartment();
                 break;
             
             case 'View all roles':
@@ -69,7 +69,7 @@ const promptMenu = () => {
 
 //---- Queries to select data from the database tables ----//
 
-const selectionDepartments = () => {
+const selectionDepartment = () => {
     connection.query(
         'SELECT * FROM department;',
         (err, results) => {
@@ -89,7 +89,7 @@ const selectionRole = () => {
             promptMenu();
         }
     )
-}
+};
 
 
 const selectionEmployee = () => {
@@ -100,7 +100,36 @@ const selectionEmployee = () => {
             promptMenu();
         }
     )
-}
+};
+
+
+
+//---- Prompts to add/ update information ----//
+const selectionAddDepartment = () => {
+    inquirer.prompt(
+        [{
+            type: 'input',
+            name: 'name',
+            message: 'What is the name of the department you would like to add?',
+            validate: newDepartment => {
+                if (newDepartment) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        }]
+    )
+    .then(name => {
+        connection.query('INSERT INTO department SET ?', {department_name: name.name}, (err, result) => {
+            if (err) throw err;
+            selectionDepartment();
+        });
+    });
+};
+
+
 
 
 
