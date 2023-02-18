@@ -19,7 +19,7 @@ The user/ manager will be able to update their roles as required.
 
 ## Application Documentation
 
-[Click here to watch this application in action!]()
+[Click here to watch this application in action!](https://drive.google.com/file/d/1G98cX5Na86G8L1aevgdDv2EVcc96IEVR/view)
 
 Github Repo: https://github.com/MoMoncada/employee-tracker
 
