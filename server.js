@@ -33,6 +33,8 @@ const promptMenu = () => {
             ]
         }
     ]) 
+
+
     //-- Functions to be executed according to the user's choice --//
     .then(selectedChoice => {
         switch (selectedChoice.menu) {
@@ -54,6 +56,10 @@ const promptMenu = () => {
 
             case 'Add a role':
                 selectionAddRole();
+                break;
+            
+            case 'Add an employee':
+                selectionAddEmployee();
                 break;
             
             case 'Update an employee role':
@@ -104,7 +110,7 @@ const selectionEmployee = () => {
 
 
 
-//---- Prompts to add/ update information ----//
+//---- Prompts to add/ update information in SQL----//
 const selectionAddDepartment = () => {
     inquirer.prompt(
         [{
@@ -130,9 +136,212 @@ const selectionAddDepartment = () => {
 };
 
 
+const selectionAddRole = () => {
+
+    return connection.promise().query(
+        "SELECT department.id, department.department_name FROM department;"
+    )
+        .then(([departments]) => {
+            let departmentChoices = departments.map(({
+                id,
+                name
+            }) => ({
+                name: name,
+                value: id
+            }));
+
+            inquirer.prompt(
+                [{
+                    type: 'input',
+                    name: 'title',
+                    message: 'Enter the name of your title (Required)',
+                    validate: titleName => {
+                        if (titleName) {
+                            return true;
+                        } else {
+                            console.log('Please enter your title name!');
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'list',
+                    name: 'department',
+                    message: 'Which department are you from?',
+                    choices: departmentChoices
+                },
+                {
+                    type: 'input',
+                    name: 'salary',
+                    message: 'Enter your salary (Required)',
+                    validate: salary => {
+                        if (salary) {
+                            return true;
+                        } else {
+                            console.log('Please enter your salary!');
+                            return false;
+                        }
+                    }
+                }
+                ]
+            )
+                .then(({ title, department, salary }) => {
+                    const query = connection.query(
+                        'INSERT INTO role SET ?',
+                        {
+                            title: title,
+                            department_id: department,
+                            salary: salary
+                        },
+                        function (err, res) {
+                            if (err) throw err;
+                        }
+                    )
+                })
+                
+                .then(() => selectionRole())
+
+        })
+}
 
 
 
+
+const selectionAddEmployee = (roles) => {
+  connection.promise().query(
+    'SELECT R.id, R.title FROM role R;'
+  )
+    .then(([employees]) => {
+      let titleChoices = employees.map(({ id, title }) => ({
+        name: title,
+        value: id
+      }));
+
+      connection.promise().query(
+        'SELECT E.id, CONCAT(E.first_name," ",E.last_name) AS manager FROM employee E;'
+      )
+        .then(([managers]) => {
+          let managerChoices = managers.map(({ id, manager }) => ({
+            value: id,
+            name: manager
+          }));
+
+          inquirer.prompt([
+            {
+              type: 'input',
+              name: 'firstName',
+              message: 'What is the employee\'s first name (Required)',
+              validate: firstName => {
+                if (firstName) {
+                  return true;
+                } else {
+                  console.log('Please enter the employee\'s first name!');
+                  return false;
+                }
+              }
+            },
+            {
+              type: 'input',
+              name: 'lastName',
+              message: 'What is the employee\'s last name (Required)',
+              validate: lastName => {
+                if (lastName) {
+                  return true;
+                } else {
+                  console.log('Please enter the employee\'s last name!');
+                  return false;
+                }
+              }
+            },
+            {
+              type: 'list',
+              name: 'role',
+              message: 'What is the employee\'s role?',
+              choices: titleChoices
+            },
+            {
+              type: 'list',
+              name: 'manager',
+              message: 'Who is the employee\'s manager?',
+              choices: managerChoices
+            }
+          ])
+            .then(({ firstName, lastName, role, manager }) => {
+              const query = connection.query(
+                'INSERT INTO employee SET ?',
+                {
+                  first_name: firstName,
+                  last_name: lastName,
+                  role_id: role,
+                  manager_id: manager
+                },
+                function (err, res) {
+                  if (err) throw err;
+                  console.log({ role, manager });
+                }
+              );
+            })
+            .then(() => selectionEmployee());
+        });
+    });
+};
+
+selectionUpdateEmployeeRole = () => {
+    return connection.promise().query(
+      "SELECT id, title FROM role;"
+    )
+      .then(([rows]) => {
+        const roleChoices = rows.map(({ id, title }) => ({ value: id, name: title }));
+        return inquirer.prompt([
+          {
+            type: 'list',
+            name: 'roleId',
+            message: 'Which role do you want to update?',
+            choices: roleChoices
+          },
+          {
+            type: 'input',
+            name: 'title',
+            message: 'Enter the updated title of the role (Required)',
+            validate: (title) => {
+              if (title) {
+                return true;
+              } else {
+                return 'Please enter the updated title of the role';
+              }
+            }
+          },
+          {
+            type: 'number',
+            name: 'salary',
+            message: 'Enter the updated salary of the role (Required)',
+            validate: (salary) => {
+              if (salary) {
+                return true;
+              } else {
+                return 'Please enter the updated salary of the role';
+              }
+            }
+          }
+        ]);
+      })
+      .then(({ roleId, title, salary }) => {
+        const query = 'UPDATE role SET title = ?, salary = ? WHERE id = ?';
+        return connection.promise().query(query, [title, salary, roleId]);
+      })
+      .then(() => {
+        console.log('Role updated successfully!');
+        return promptMenu();
+      })
+      .catch((err) => console.log(err));
+  };
+  
+
+
+
+
+    
+  
 
 
 promptMenu();
